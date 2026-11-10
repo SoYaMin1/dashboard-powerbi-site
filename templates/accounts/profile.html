@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="container">
+    <div class="row g-4">
+
+      {# ---------- Карточка пользователя ---------- #}
+      <div class="col-lg-4">
+        <div class="card p-4 text-center h-100">
+          <div class="mb-3">{% include "partials/avatar.html" with u=user size="lg" %}</div>
+          <h1 class="h4 mb-1">{{ user.get_full_name|default:user.username }}</h1>
+          <p class="text-muted-soft mb-3">@{{ user.username }}</p>
+
+          {% if user.profile.position or user.profile.organization %}
+            <p class="mb-3">
+              <span class="badge rounded-pill badge-soft-success px-3 py-2">
+                {{ user.profile.position }}{% if user.profile.position and user.profile.organization %} · {% endif %}{{ user.profile.organization }}
+              </span>
+            </p>
+          {% endif %}
+
+          <ul class="list-unstyled text-start small mb-4">
+            <li class="mb-2"><i class="bi bi-envelope me-2" aria-hidden="true"></i>{{ user.email|default:"Email не указан" }}</li>
+            <li class="mb-2"><i class="bi bi-calendar-check me-2" aria-hidden="true"></i>На сайте с {{ user.date_joined|date:"j E Y" }}</li>
+            <li><i class="bi bi-clock-history me-2" aria-hidden="true"></i>Последний вход: {{ user.last_login|date:"j E Y, H:i"|default:"—" }}</li>
+          </ul>
+
+          <div class="d-grid gap-2 mt-auto">
+            <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-primary">
+              <i class="bi bi-key me-2" aria-hidden="true"></i>Сменить пароль
+            </a>
+            <a href="{% url 'dashboards:list' %}" class="btn btn-outline-success">
+              <i class="bi bi-grid me-2" aria-hidden="true"></i>Перейти к дашбордам
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {# ---------- Редактирование ---------- #}
+      <div class="col-lg-8">
+        <div class="card p-4 p-md-5 h-100">
+          <h2 class="h4 mb-4">Редактирование профиля</h2>
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {% include "partials/form_errors.html" with form=user_form %}
+            {% include "partials/form_errors.html" with form=profile_form %}
+
+            <div class="row">
+              <div class="col-md-6">{% include "partials/form_field.html" with field=user_form.first_name %}</div>
+              <div class="col-md-6">{% include "partials/form_field.html" with field=user_form.last_name %}</div>
+            </div>
+            {% include "partials/form_field.html" with field=user_form.email %}
+
+            <div class="row">
+              <div class="col-md-6">{% include "partials/form_field.html" with field=profile_form.position %}</div>
+              <div class="col-md-6">{% include "partials/form_field.html" with field=profile_form.organization %}</div>
+            </div>
+            {% include "partials/form_field.html" with field=profile_form.avatar %}
+
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="bi bi-check2 me-2" aria-hidden="true"></i>Сохранить изменения
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

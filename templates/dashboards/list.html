@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <span class="section-eyebrow">Отчёты Power BI</span>
+    <h1 class="section-title">Дашборды</h1>
+    <p class="section-lead mb-5">Выберите отчёт. Внутри доступны интерактивные графики, фильтры и слайсеры.</p>
+
+    <div class="row g-4">
+      {% for dashboard in dashboards %}
+        <div class="col-md-6">
+          <div class="card card-hover h-100 p-4 position-relative">
+            <div class="d-flex align-items-start gap-3">
+              <span class="icon-tile icon-tile-gradient"><i class="bi {{ dashboard.icon }}" aria-hidden="true"></i></span>
+              <div class="flex-grow-1">
+                <h2 class="h5 mb-2">
+                  <a href="{{ dashboard.get_absolute_url }}" class="card-link-stretched stretched-link">{{ dashboard.title }}</a>
+                </h2>
+                <p class="text-muted-soft mb-3">{{ dashboard.description|truncatechars:160 }}</p>
+                <div class="d-flex flex-wrap gap-2">
+                  {% if dashboard.is_connected %}
+                    <span class="badge rounded-pill badge-soft-success px-3 py-2">
+                      <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Подключён
+                    </span>
+                  {% else %}
+                    <span class="badge rounded-pill text-bg-light border px-3 py-2">
+                      <i class="bi bi-hourglass-split me-1" aria-hidden="true"></i>Скоро
+                    </span>
+                  {% endif %}
+                  {% if dashboard.requires_login and not user.is_authenticated %}
+                    <span class="badge rounded-pill badge-soft-primary px-3 py-2">
+                      <i class="bi bi-lock me-1" aria-hidden="true"></i>Нужен вход
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+              <i class="bi bi-arrow-right fs-4 text-muted-soft" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <div class="pbi-empty">
+            <p class="mb-0 text-muted-soft">Пока нет опубликованных дашбордов.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

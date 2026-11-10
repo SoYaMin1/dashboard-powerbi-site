@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-sm">
+  <div class="container">
+
+    <nav aria-label="Навигационная цепочка">
+      <ol class="breadcrumb small mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Главная</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'dashboards:list' %}">Дашборды</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ dashboard.title }}</li>
+      </ol>
+    </nav>
+
+    {# ---------- Заголовок и кнопки ---------- #}
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+      <div class="d-flex gap-3 align-items-start">
+        <span class="icon-tile icon-tile-gradient"><i class="bi {{ dashboard.icon }}" aria-hidden="true"></i></span>
+        <div>
+          <h1 class="h2 mb-1">{{ dashboard.title }}</h1>
+          {% if dashboard.description %}
+            <p class="text-muted-soft mb-0" style="max-width: 760px">{{ dashboard.description|linebreaksbr }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if embed_url %}
+        <div class="d-flex flex-wrap gap-2 flex-shrink-0">
+          <button type="button" class="btn btn-primary" data-fullscreen-target="#pbi-frame">
+            <i class="bi bi-arrows-fullscreen me-2" aria-hidden="true"></i>На весь экран
+          </button>
+          <a href="{{ embed_url }}" class="btn btn-outline-success" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-box-arrow-up-right me-2" aria-hidden="true"></i>В новой вкладке
+            <span class="visually-hidden">(откроется в новой вкладке)</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    {# ---------- Отчёт ---------- #}
+    {% if embed_url %}
+      {# +57px — две панели внизу отчёта Power BI: масштаб и навигация по страницам #}
+      <div id="pbi-frame"
+           class="pbi-wrapper{% if dashboard.is_map %} pbi-wrapper--map{% endif %}"
+           style="--ratio: calc({{ dashboard.ratio_percent }}% + 57px)">
+        <div class="pbi-loader" role="status">
+          <div class="spinner-border" aria-hidden="true"></div>
+          <span>Загружаем отчёт Power BI…</span>
+        </div>
+        <iframe src="{{ embed_url }}" title="Отчёт Power BI: {{ dashboard.title }}"
+                loading="lazy" allowfullscreen></iframe>
+      </div>
+      <p class="small text-muted-soft mt-3 mb-0">
+        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
+        Используйте фильтры, слайсеры и навигацию по страницам внизу отчёта.
+        Данные в опубликованном отчёте обновляются с задержкой до часа.
+      </p>
+    {% else %}
+      <div class="pbi-empty">
+        <span class="icon-tile icon-tile-gradient mb-3"><i class="bi bi-plug" aria-hidden="true"></i></span>
+        <h2 class="h4">Отчёт ещё не подключён</h2>
+        <p class="text-muted-soft mb-0">
+          Ссылка на отчёт Power BI пока не добавлена. Загляните чуть позже.
+        </p>
+        {% if user.is_staff %}
+          <a href="{% url 'admin:dashboards_dashboard_change' dashboard.pk %}" class="btn btn-primary mt-4">
+            <i class="bi bi-gear me-2" aria-hidden="true"></i>Добавить ссылку в админке
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# ---------- Другие отчёты ---------- #}
+    {% if other_dashboards %}
+      <div class="mt-5">
+        <h2 class="h5 mb-3">Другие отчёты</h2>
+        <div class="row g-3">
+          {% for item in other_dashboards %}
+            <div class="col-md-6">
+              <a href="{{ item.get_absolute_url }}" class="card card-hover p-3 d-flex flex-row align-items-center gap-3 text-decoration-none">
+                <span class="icon-tile"><i class="bi {{ item.icon }}" aria-hidden="true"></i></span>
+                <span class="fw-semibold text-primary-brand">{{ item.title }}</span>
+                <i class="bi bi-arrow-right ms-auto text-muted-soft" aria-hidden="true"></i>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

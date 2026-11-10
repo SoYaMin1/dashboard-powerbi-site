@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена — AdventureWorks Sales Analytics{% endblock %}
+
+{% block content %}
+<section class="section error-page">
+  <div class="container text-center">
+    <p class="error-code" aria-hidden="true">404</p>
+    <h1 class="h2">Страница не найдена</h1>
+    <p class="text-muted-soft mb-4">Возможно, она была перемещена или вы ошиблись в адресе.</p>
+    <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg"><i class="bi bi-house me-2" aria-hidden="true"></i>На главную</a>
+  </div>
+</section>
+{% endblock %}

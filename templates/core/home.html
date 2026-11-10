@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# ---------- Hero ---------- #}
+<section class="hero">
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="badge rounded-pill badge-soft-primary px-3 py-2 mb-3">
+          <i class="bi bi-bar-chart-line me-1" aria-hidden="true"></i> Учебный проект · Power BI
+        </span>
+        <h1 class="hero-title mb-3">AdventureWorks Sales Analytics</h1>
+        <p class="hero-subtitle mb-4">
+          Интерактивные отчёты Power BI по продажам вымышленной компании Adventure Works:
+          динамика, география, продукты и категории в одном месте.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'dashboards:detail' 'sales' %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>Открыть дашборд
+          </a>
+          <a href="{% url 'dashboards:detail' 'sales-map' %}" class="btn btn-outline-success btn-lg">
+            <i class="bi bi-globe-americas me-2" aria-hidden="true"></i>Карта продаж
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6" aria-hidden="true">
+        {# Декоративная иллюстрация без реальных данных #}
+        <div class="hero-visual">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="icon-tile icon-tile-gradient"><i class="bi bi-graph-up-arrow"></i></span>
+            <div class="flex-grow-1">
+              <div class="skeleton-line mb-2" style="width: 55%"></div>
+              <div class="skeleton-line" style="width: 35%"></div>
+            </div>
+          </div>
+          <div class="bars">
+            <span style="height: 35%"></span><span style="height: 55%"></span>
+            <span style="height: 45%"></span><span style="height: 70%"></span>
+            <span style="height: 60%"></span><span style="height: 85%"></span>
+            <span style="height: 75%"></span><span style="height: 95%"></span>
+          </div>
+          <div class="row g-3 mt-2">
+            <div class="col-4"><div class="skeleton-line"></div></div>
+            <div class="col-4"><div class="skeleton-line"></div></div>
+            <div class="col-4"><div class="skeleton-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- Что внутри ---------- #}
+<section class="section section-soft">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Что внутри</span>
+      <h2 class="section-title">Ключевые разрезы анализа</h2>
+      <p class="section-lead mx-auto">Отчёты построены так, чтобы быстро ответить на основные вопросы о продажах.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card card-hover h-100 p-4">
+          <span class="icon-tile mb-3"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+          <h3 class="h5">Анализ продаж</h3>
+          <p class="text-muted-soft mb-0">Выручка, количество заказов и средний чек с интерактивными фильтрами и слайсерами.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card card-hover h-100 p-4">
+          <span class="icon-tile mb-3"><i class="bi bi-globe-americas" aria-hidden="true"></i></span>
+          <h3 class="h5">География продаж</h3>
+          <p class="text-muted-soft mb-0">Карта мира с городами и регионами, где продажи компании наиболее высоки.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card card-hover h-100 p-4">
+          <span class="icon-tile mb-3"><i class="bi bi-calendar3" aria-hidden="true"></i></span>
+          <h3 class="h5">Динамика по времени</h3>
+          <p class="text-muted-soft mb-0">Тренды по годам, кварталам и месяцам, сезонность и сравнение периодов.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card card-hover h-100 p-4">
+          <span class="icon-tile mb-3"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+          <h3 class="h5">Продукты и категории</h3>
+          <p class="text-muted-soft mb-0">Структура продаж по категориям, подкатегориям и отдельным товарам.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- Об источнике данных ---------- #}
+<section class="section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="section-eyebrow">Источник данных</span>
+        <h2 class="section-title">AdventureWorksDW2022</h2>
+        <p class="text-muted-soft">
+          AdventureWorksDW2022 — учебное хранилище данных от Microsoft для SQL Server.
+          Оно описывает вымышленную компанию <strong>Adventure Works Cycles</strong>,
+          которая производит и продаёт велосипеды, комплектующие, одежду и аксессуары.
+        </p>
+        <p class="text-muted-soft mb-0">
+          Хранилище построено по схеме «звезда»: таблицы фактов с продажами связаны
+          с измерениями дат, продуктов, клиентов и географии. Эта структура хорошо подходит
+          для построения моделей и отчётов в Power BI.
+        </p>
+      </div>
+      <div class="col-lg-6">
+        <div class="card p-4">
+          <h3 class="h6 text-uppercase text-muted-soft mb-3">Основные таблицы</h3>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge rounded-pill badge-soft-primary px-3 py-2">FactInternetSales</span>
+            <span class="badge rounded-pill badge-soft-primary px-3 py-2">FactResellerSales</span>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimDate</span>
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimProduct</span>
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimProductCategory</span>
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimCustomer</span>
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimGeography</span>
+            <span class="badge rounded-pill badge-soft-success px-3 py-2">DimSalesTerritory</span>
+          </div>
+          <p class="small text-muted-soft mt-3 mb-0">
+            <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
+            Таблицы фактов (синие) и измерений (зелёные).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- CTA ---------- #}
+<section class="section section-soft">
+  <div class="container">
+    <div class="cta-box text-center">
+      {% if user.is_authenticated %}
+        <h2 class="section-title">Дашборды уже доступны</h2>
+        <p class="section-lead mx-auto mb-4">Перейдите к отчётам и исследуйте данные с помощью фильтров и слайсеров.</p>
+        <a href="{% url 'dashboards:list' %}" class="btn btn-primary btn-lg">
+          <i class="bi bi-grid me-2" aria-hidden="true"></i>Все дашборды
+        </a>
+      {% else %}
+        <h2 class="section-title">Зарегистрируйтесь, чтобы получить доступ к дашбордам</h2>
+        <p class="section-lead mx-auto mb-4">Регистрация займёт меньше минуты и откроет все интерактивные отчёты проекта.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">Зарегистрироваться</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline-success btn-lg">Уже есть аккаунт</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

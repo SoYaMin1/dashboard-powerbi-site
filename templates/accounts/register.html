@@ -1,0 +1,29 @@
+{% extends "registration/auth_base.html" %}
+
+{% block card_class %}auth-card-wide{% endblock %}
+{% block auth_icon %}bi-person-plus{% endblock %}
+{% block auth_title %}Регистрация{% endblock %}
+{% block auth_subtitle %}Создайте аккаунт для доступа к отчётам Power BI{% endblock %}
+
+{% block auth_body %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "partials/form_errors.html" %}
+    <div class="row">
+      <div class="col-md-6">{% include "partials/form_field.html" with field=form.first_name %}</div>
+      <div class="col-md-6">{% include "partials/form_field.html" with field=form.last_name %}</div>
+    </div>
+    {% include "partials/form_field.html" with field=form.username %}
+    {% include "partials/form_field.html" with field=form.email %}
+    <div class="row">
+      <div class="col-md-6">{% include "partials/form_field.html" with field=form.password1 %}</div>
+      <div class="col-md-6">{% include "partials/form_field.html" with field=form.password2 %}</div>
+    </div>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn btn-primary btn-lg w-100">Зарегистрироваться</button>
+  </form>
+
+  <p class="text-center text-muted-soft mt-4 mb-0">
+    Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a>
+  </p>
+{% endblock %}

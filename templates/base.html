@@ -1,0 +1,46 @@
+{% load static %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% if page_title %}{{ page_title }} — {% endif %}AdventureWorks Sales Analytics{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ page_description|default:'Учебный проект: интерактивные отчёты Power BI по данным AdventureWorksDW2022.' }}{% endblock %}">
+  <meta name="theme-color" content="#12239E">
+  <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+  {% if request %}<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">{% endif %}
+
+  {# Open Graph #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AdventureWorks Sales Analytics">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="{% if page_title %}{{ page_title }} — {% endif %}AdventureWorks Sales Analytics">
+  <meta property="og:description" content="{{ page_description|default:'Учебный проект: интерактивные отчёты Power BI по данным AdventureWorksDW2022.' }}">
+  {% if request %}<meta property="og:url" content="{{ request.build_absolute_uri }}">{% endif %}
+
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+
+  {% include "partials/navbar.html" %}
+
+  <main id="main" tabindex="-1">
+    {% include "partials/messages.html" %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
