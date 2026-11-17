@@ -1,60 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="section-sm">
-  <div class="container">
-
-    <nav aria-label="Навигационная цепочка">
-      <ol class="breadcrumb small mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Главная</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'dashboards:list' %}">Дашборды</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ dashboard.title }}</li>
-      </ol>
-    </nav>
-
-    {# ---------- Заголовок и кнопки ---------- #}
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
-      <div class="d-flex gap-3 align-items-start">
-        <span class="icon-tile icon-tile-gradient"><i class="bi {{ dashboard.icon }}" aria-hidden="true"></i></span>
-        <div>
-          <h1 class="h2 mb-1">{{ dashboard.title }}</h1>
-          {% if dashboard.description %}
-            <p class="text-muted-soft mb-0" style="max-width: 760px">{{ dashboard.description|linebreaksbr }}</p>
-          {% endif %}
-        </div>
-      </div>
-
-      {% if embed_url %}
-        <div class="d-flex flex-wrap gap-2 flex-shrink-0">
-          <button type="button" class="btn btn-primary" data-fullscreen-target="#pbi-frame">
-            <i class="bi bi-arrows-fullscreen me-2" aria-hidden="true"></i>На весь экран
-          </button>
-          <a href="{{ embed_url }}" class="btn btn-outline-success" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-box-arrow-up-right me-2" aria-hidden="true"></i>В новой вкладке
-            <span class="visually-hidden">(откроется в новой вкладке)</span>
-          </a>
-        </div>
-      {% endif %}
+{# ---------- Панель отчёта: пристыкована к навигации ---------- #}
+<div class="report-toolbar">
+  <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <div class="d-flex align-items-center gap-2 min-w-0">
+      <a href="{% url 'dashboards:list' %}" class="report-back" title="Все дашборды">
+        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+        <span class="visually-hidden">Все дашборды</span>
+      </a>
+      <span class="icon-tile icon-tile-gradient icon-tile-sm"><i class="bi {{ dashboard.icon }}" aria-hidden="true"></i></span>
+      <h1 class="report-title text-truncate mb-0">{{ dashboard.title }}</h1>
     </div>
 
-    {# ---------- Отчёт ---------- #}
     {% if embed_url %}
-      {# +57px — две панели внизу отчёта Power BI: масштаб и навигация по страницам #}
-      <div id="pbi-frame"
-           class="pbi-wrapper{% if dashboard.is_map %} pbi-wrapper--map{% endif %}"
-           style="--ratio: calc({{ dashboard.ratio_percent }}% + 57px)">
-        <div class="pbi-loader" role="status">
-          <div class="spinner-border" aria-hidden="true"></div>
-          <span>Загружаем отчёт Power BI…</span>
-        </div>
-        <iframe src="{{ embed_url }}" title="Отчёт Power BI: {{ dashboard.title }}"
-                loading="lazy" allowfullscreen></iframe>
+      <div class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn btn-primary btn-sm" data-fullscreen-target="#pbi-frame">
+          <i class="bi bi-arrows-fullscreen me-1" aria-hidden="true"></i>На весь экран
+        </button>
+        <a href="{{ embed_url }}" class="btn btn-outline-success btn-sm" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i>В новой вкладке
+          <span class="visually-hidden">(откроется в новой вкладке)</span>
+        </a>
       </div>
-      <p class="small text-muted-soft mt-3 mb-0">
-        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
-        Используйте фильтры, слайсеры и навигацию по страницам внизу отчёта.
-        Данные в опубликованном отчёте обновляются с задержкой до часа.
-      </p>
+    {% endif %}
+  </div>
+</div>
+
+{# ---------- Отчёт: размер подбирается под высоту окна ---------- #}
+<section class="report-stage">
+  <div class="container">
+    {% if embed_url %}
+      {# --pbi-bar — высота двух панелей внизу отчёта Power BI: масштаб и навигация по страницам #}
+      <div class="pbi-fit" style="--pbi-ratio: {{ dashboard.ratio_percent }}; --pbi-bar: 57px">
+        <div id="pbi-frame" class="pbi-wrapper{% if dashboard.is_map %} pbi-wrapper--map{% endif %}">
+          <div class="pbi-loader" role="status">
+            <div class="spinner-border" aria-hidden="true"></div>
+            <span>Загружаем отчёт Power BI…</span>
+          </div>
+          <iframe src="{{ embed_url }}" title="Отчёт Power BI: {{ dashboard.title }}"
+                  loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
     {% else %}
       <div class="pbi-empty">
         <span class="icon-tile icon-tile-gradient mb-3"><i class="bi bi-plug" aria-hidden="true"></i></span>
@@ -69,10 +56,25 @@
         {% endif %}
       </div>
     {% endif %}
+  </div>
+</section>
 
-    {# ---------- Другие отчёты ---------- #}
+{# ---------- Описание и другие отчёты ---------- #}
+<section class="section-sm pt-4">
+  <div class="container">
+    {% if dashboard.description %}
+      <p class="text-muted-soft mb-2" style="max-width: 760px">{{ dashboard.description|linebreaksbr }}</p>
+    {% endif %}
+    {% if embed_url %}
+      <p class="small text-muted-soft mb-0">
+        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
+        Используйте фильтры, слайсеры и навигацию по страницам внизу отчёта.
+        Данные в опубликованном отчёте обновляются с задержкой до часа.
+      </p>
+    {% endif %}
+
     {% if other_dashboards %}
-      <div class="mt-5">
+      <div class="mt-4">
         <h2 class="h5 mb-3">Другие отчёты</h2>
         <div class="row g-3">
           {% for item in other_dashboards %}
@@ -87,7 +89,6 @@
         </div>
       </div>
     {% endif %}
-
   </div>
 </section>
 {% endblock %}

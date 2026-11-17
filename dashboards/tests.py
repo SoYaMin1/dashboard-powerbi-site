@@ -48,7 +48,7 @@ class DashboardViewTests(TestCase):
         response = self.client.get(self.detail_url())
         self.assertContains(response, f'src="{REPORT_URL}"')
         self.assertContains(response, 'title="Отчёт Power BI: Дашборд продаж"')
-        self.assertContains(response, "--ratio: calc(56.25%")
+        self.assertContains(response, "--pbi-ratio: 56.25")
 
     @override_settings(POWERBI_MAP_URL=REPORT_URL)
     def test_env_fallback_used_when_placeholder(self):

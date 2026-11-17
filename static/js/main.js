@@ -7,6 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(markLoaded, 20000); // запасной вариант, если событие load не пришло
   });
 
+    // Высота меню и панели отчёта -> CSS-переменные (отчёт подстраивается под окно)
+  const updateChromeHeights = () => {
+    const root = document.documentElement.style;
+    const header = document.querySelector(".site-header");
+    const toolbar = document.querySelector(".report-toolbar");
+    if (header) root.setProperty("--header-h", `${header.offsetHeight}px`);
+    if (toolbar) root.setProperty("--toolbar-h", `${toolbar.offsetHeight}px`);
+  };
+  updateChromeHeights();
+  window.addEventListener("resize", updateChromeHeights);
+
   // Кнопка «На весь экран» (Fullscreen API)
   const fullscreenSupported = document.fullscreenEnabled || document.webkitFullscreenEnabled;
   document.querySelectorAll("[data-fullscreen-target]").forEach((button) => {
